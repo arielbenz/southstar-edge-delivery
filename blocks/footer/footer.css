@@ -1,20 +1,72 @@
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: var(--color-secondary);
+  border-top: 3px solid var(--color-primary);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 footer .footer > div {
   margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+  max-width: 1248px;
+  padding: var(--space-10) var(--space-6) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 footer .footer p {
   margin: 0;
+  line-height: var(--leading-relaxed);
+}
+
+/* Nav and legal links */
+footer .footer p:not(:last-child) a:any-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: var(--font-medium);
+  transition: color var(--transition-fast);
+}
+
+footer .footer p:not(:last-child) a:hover {
+  color: var(--color-primary);
+}
+
+/* Separator characters between links */
+footer .footer p:not(:last-child) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+/* Hide the " | " text nodes visually by targeting the paragraphs that contain them */
+footer .footer p:not(:last-child) {
+  column-gap: 0;
+}
+
+/* Copyright line */
+footer .footer p:last-child {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--text-xs);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: var(--space-2);
 }
 
 @media (width >= 900px) {
   footer .footer > div {
-    padding: 40px 32px 24px;
+    padding: var(--space-10) var(--space-8) var(--space-8);
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+
+  footer .footer p:last-child {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: var(--space-4);
+    margin-top: 0;
   }
 }

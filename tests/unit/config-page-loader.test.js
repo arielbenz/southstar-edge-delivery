@@ -30,81 +30,81 @@ const FIXTURE_HTML = `
 `;
 
 describe('parseConfigPage', () => {
-  test('extrae strings correctamente', () => {
+  test('gets strings correctly', () => {
     expect(parseConfigPage(FIXTURE_HTML).title).toBe(
       'Enroll in Ohio Natural Gas',
     );
   });
 
-  test('convierte a camelCase simple', () => {
+  test('converts to simple camelCase', () => {
     expect(parseConfigPage(FIXTURE_HTML).supportPhone).toBe('1-800-555-0100');
   });
 
-  test('convierte a camelCase con numero', () => {
+  test('converts to camelCase with number', () => {
     expect(parseConfigPage(FIXTURE_HTML).step1Title).toBe('Choose Your Plan');
   });
 
-  test('castea boolean true', () => {
+  test('casts boolean true', () => {
     const result = parseConfigPage(FIXTURE_HTML);
     expect(result.termsRequired).toBe(true);
     expect(typeof result.termsRequired).toBe('boolean');
   });
 
-  test('castea boolean false', () => {
+  test('casts boolean false', () => {
     const result = parseConfigPage('<main><p>Active: false</p></main>');
     expect(result.active).toBe(false);
   });
 
-  test('castea number entero', () => {
+  test('casts integer number', () => {
     const result = parseConfigPage(FIXTURE_HTML);
     expect(result.minAge).toBe(18);
     expect(typeof result.minAge).toBe('number');
   });
 
-  test('castea URL como string', () => {
+  test('casts URL as string', () => {
     const result = parseConfigPage(FIXTURE_HTML);
     expect(result.termsUrl).toBe('/docs/terms.pdf');
     expect(typeof result.termsUrl).toBe('string');
   });
 
-  test('extrae campos de multiples secciones', () => {
+  test('extracts fields from multiple sections', () => {
     const result = parseConfigPage(FIXTURE_HTML);
     expect(result.title).toBe('Enroll in Ohio Natural Gas');
     expect(result.step1Title).toBe('Choose Your Plan');
   });
 
-  test('ignora parrafos sin dos puntos', () => {
+  test('ignores paragraphs without colons', () => {
     const result = parseConfigPage(
       '<main><p>Este es un parrafo normal</p></main>',
     );
     expect(result).toEqual({});
   });
 
-  test('ignora parrafos con dos puntos al inicio', () => {
+  test('ignores paragraphs with colons at the start', () => {
     const result = parseConfigPage('<main><p>: valor</p></main>');
     expect(result).toEqual({});
   });
 
-  test('ignora parrafos con dos puntos al final', () => {
+  test('ignores paragraphs with colons at the end', () => {
     const result = parseConfigPage('<main><p>Key:</p></main>');
     expect(result).toEqual({});
   });
 
-  test('HTML vacio devuelve objeto vacio', () => {
+  test('empty HTML returns empty object', () => {
     expect(parseConfigPage('<main></main>')).toEqual({});
   });
 
-  test('no falla con HTML malformado', () => {
-    expect(parseConfigPage('no es html valido')).toEqual({});
+  test('does not fail with malformed HTML', () => {
+    expect(parseConfigPage('not valid HTML')).toEqual({});
   });
 
-  test('extrae step2Title y step3Title correctamente', () => {
+  test('extracts step2Title and step3Title correctly', () => {
     const result = parseConfigPage(FIXTURE_HTML);
     expect(result.step2Title).toBe('Your Information');
     expect(result.step3Title).toBe('Review & Confirm');
   });
 
-  test('el simbolo & en el valor se preserva', () => {
+  test('preserves the & symbol in values', () => {
     const result = parseConfigPage(
       '<main><p>Step 3 Description: Check your details &amp; confirm.</p></main>',
     );

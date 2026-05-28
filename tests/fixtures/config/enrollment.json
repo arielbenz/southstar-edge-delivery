@@ -1,0 +1,44 @@
+{
+  "total": 16,
+  "limit": 256,
+  "offset": 0,
+  "data": [
+    { "key": "title", "value": "Enroll in Ohio Natural Gas", "type": "text" },
+    { "key": "subtitle", "value": "Takes only 5 minutes", "type": "text" },
+    { "key": "supportPhone", "value": "1-800-555-0100", "type": "text" },
+    {
+      "key": "supportEmail",
+      "value": "support@southstarenergy.com",
+      "type": "text"
+    },
+    { "key": "termsRequired", "value": "true", "type": "boolean" },
+    { "key": "minAge", "value": "18", "type": "number" },
+    { "key": "step1Title", "value": "Choose Your Plan", "type": "text" },
+    {
+      "key": "step1Description",
+      "value": "Select the plan that fits your home.",
+      "type": "text"
+    },
+    { "key": "step2Title", "value": "Your Information", "type": "text" },
+    {
+      "key": "step2Description",
+      "value": "We need a few details.",
+      "type": "text"
+    },
+    { "key": "step3Title", "value": "Review & Confirm", "type": "text" },
+    {
+      "key": "step3Description",
+      "value": "Double-check before submitting.",
+      "type": "text"
+    },
+    { "key": "termsUrl", "value": "/docs/terms.pdf", "type": "text" },
+    { "key": "privacyUrl", "value": "/docs/privacy.pdf", "type": "text" },
+    {
+      "key": "successUrl",
+      "value": "/enrollment/confirmation",
+      "type": "text"
+    },
+    { "key": "errorUrl", "value": "/enrollment/error", "type": "text" }
+  ],
+  ":type": "sheet"
+}

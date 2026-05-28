@@ -14,11 +14,12 @@ Content is sourced from Document Authoring (DA) at `https://content.da.live/ohio
 4. [Blocks](#blocks)
 5. [Scripts](#scripts)
 6. [Block Parser](#block-parser)
-7. [Preview Server](#preview-server)
-8. [Sidekick Library](#sidekick-library)
-9. [Content Models](#content-models)
-10. [Storybook](#storybook)
-11. [Testing](#testing)
+7. [Config Page Loader](#config-page-loader)
+8. [Preview Server](#preview-server)
+9. [Sidekick Library](#sidekick-library)
+10. [Content Models](#content-models)
+11. [Storybook](#storybook)
+12. [Testing](#testing)
 
 ---
 
@@ -27,11 +28,23 @@ Content is sourced from Document Authoring (DA) at `https://content.da.live/ohio
 ```
 southstar-edge-delivery/
 ├── blocks/                  # One folder per block
+│   ├── accordion/
+│   │   ├── accordion.js          # decorate() function
+│   │   ├── accordion.css         # Block styles
+│   │   └── _accordion.json       # Schema + mock data (local tooling only)
+│   ├── enrollment-flow/
+│   │   ├── enrollment-flow.js    # EDS entry — mounts React tree
+│   │   ├── enrollment-flow.css
+│   │   ├── enrollment-flow.stories.jsx
+│   │   ├── _enrollment-flow.json
+│   │   ├── useEnrollmentConfig.js
+│   │   ├── __tests__/
+│   │   └── components/           # React component tree
+│   ├── footer/
+│   ├── fragment/
+│   ├── header/
 │   ├── hero/
-│   │   ├── hero.js          # decorate() function
-│   │   ├── hero.css         # Block styles
-│   │   └── _hero.json       # Schema + mock data (local tooling only)
-│   └── ...
+│   └── promo-banner/
 ├── models/                  # Universal Editor content models (source of truth)
 │   ├── component-definitions.json
 │   ├── component-filters.json
@@ -41,18 +54,28 @@ southstar-edge-delivery/
 │   ├── aem.js               # EDS core library (boilerplate)
 │   ├── delayed.js           # Non-critical deferred scripts
 │   ├── build-models.js      # Copies models/ → root for EDS/UE
-│   ├── preview-server/      # Local block preview server
 │   └── utils/               # Shared utilities
-│       ├── block-parser.js  # Parses EDS block DOM → structured data
+│       ├── block-parser.js      # Parses EDS block DOM → structured data
+│       ├── config-page-loader.js# Loads + parses EDS config pages
 │       ├── dom.js
 │       ├── auth.js
+│       ├── prime-client.js
 │       └── react-loader.js
 ├── styles/                  # Global CSS (tokens, layout, lazy styles)
+│   ├── tokens.css           # Design tokens (colors, spacing, typography…)
+│   ├── styles.css           # Base styles + EDS boilerplate variables
+│   ├── fonts.css
+│   └── lazy-styles.css
 ├── tools/
-│   └── sidekick/
-│       ├── library.html     # Sidekick Library UI (served locally)
-│       └── plugins/         # Custom Sidekick plugins
-├── tests/                   # Unit and integration tests
+│   └── preview-server/
+│       ├── index.js         # Express + Vite preview server
+│       ├── html-generator.js
+│       └── __tests__/
+├── tests/                   # Unit, integration and e2e tests
+│   ├── unit/
+│   ├── integration/
+│   ├── e2e/
+│   └── fixtures/
 ├── fstab.yaml               # Content source mount (DA)
 └── head.html                # <head> additions injected by EDS
 ```
@@ -117,6 +140,18 @@ blocks/accordion/
 ├── accordion.css   # Scoped styles, loaded automatically by EDS
 └── _accordion.json # Schema + mock data (used by local tooling only)
 ```
+
+### Current blocks
+
+| Block             | Type      | Description                           |
+| ----------------- | --------- | ------------------------------------- |
+| `accordion`       | Native JS | Collapsible FAQ / content sections    |
+| `enrollment-flow` | React     | Multi-step gas plan enrollment wizard |
+| `footer`          | Native JS | Site footer loaded from a fragment    |
+| `fragment`        | Native JS | Embeds another EDS page inline        |
+| `header`          | Native JS | Site navigation                       |
+| `hero`            | Native JS | Page hero with headline and image     |
+| `promo-banner`    | Native JS | Dismissible promotional banner        |
 
 ### The `_block.json` file
 
@@ -286,27 +321,22 @@ Without a parser, every block's `decorate()` function would need to contain the 
 export default function decorate(block) {
   const rows = [...block.children];
   const heading = rows[0]?.children[0]?.textContent?.trim();
-  const rate = parseFloat(rows[1]?.children[1]?.textContent?.trim());
-  const items = [...rows].slice(2).map((row) => ({
+  const items = [...rows].slice(1).map((row) => ({
     title: row.children[0]?.textContent?.trim(),
     content: row.children[1]?.innerHTML?.trim(),
   }));
-  // ...
 }
 ```
-
-This is hard to maintain: any change to the table structure means hunting down the magic index numbers in the JS. It is also impossible to test without a real DOM.
 
 `block-parser.js` solves this by separating the **structural description** (in `_block.json`) from the **traversal logic** (in the parser). The block only describes _what_ it expects; the parser handles _how_ to read it.
 
 ```js
 // With block-parser — declarative, testable
-import { parseBlock } from '../utils/block-parser.js';
-import schema from './_plans.json' assert { type: 'json' };
+import { readBlock } from '../utils/block-parser.js';
+import schema from './_enrollment-flow.json' assert { type: 'json' };
 
 export default function decorate(block) {
-  const { heading, items } = parseBlock(block, schema.eds);
-  // heading: string, items: [{ planName, rate, term, features, featured }, ...]
+  const { configPath } = readBlock(block, schema.eds);
 }
 ```
 
@@ -314,8 +344,8 @@ export default function decorate(block) {
 
 - **No magic index numbers** — field positions are declared once in the schema, not scattered throughout the code.
 - **Type coercion is automatic** — `number` fields come back as JS numbers, `boolean` as booleans, `list` as arrays. No manual `parseFloat` or `=== 'true'` checks.
-- **Consistent null handling** — if a cell is missing (author left a field blank), the value is `null` rather than `undefined` or an exception.
-- **Works on detached DOM** — uses `element.children` instead of `:scope > div` selectors, so it works on elements that haven't been inserted into the document yet (important for tests).
+- **Consistent null handling** — if a cell is missing, the value is `null` rather than `undefined` or an exception.
+- **Works on detached DOM** — uses `element.children` instead of `:scope > div` selectors, so it works in tests without a real document.
 - **Reusable across all blocks** — one utility, one test suite, used by every block that needs structured data.
 - **Single source of truth** — the same `_block.json` schema that describes the DOM structure is also used by the preview server to _generate_ that structure, so schema and parser are always in sync.
 
@@ -331,16 +361,6 @@ Each field points to an exact `[row, col]` coordinate in the table:
 { "name": "title", "row": 0, "col": 0, "type": "text" }
 ```
 
-The parser picks `rows[field.row].children[field.col]` and extracts the value. Fields that point to missing rows/cells come back as `null`.
-
-```
-Block DOM                        Result
-─────────────────────────        ─────────────────────────
-row 0 │ "Fixed Rate Plan"   →    title: "Fixed Rate Plan"
-row 1 │ "11.9" │ "¢/CCF"   →    rate: 11.9
-row 2 │ "/enroll"           →    ctaUrl: "/enroll"
-```
-
 #### `key-value` — label / value pairs
 
 Each row is a pair: the first cell is the key label, the second is the value. This structure is flexible — the author can add or reorder rows without breaking the block, as long as the labels stay consistent:
@@ -348,31 +368,24 @@ Each row is a pair: the first cell is the key label, the second is the value. Th
 ```
 Block DOM                        Result
 ─────────────────────────        ─────────────────────────
-"Heading"    │ "Get a Quote" →   heading: "Get a Quote"
-"Subtitle"   │ "<p>...</p>"  →   subtitle: "<p>...</p>"
-"CTA URL"    │ "/enroll"     →   ctaUrl: "/enroll"
+"Config Path" │ "/config/enr" → configPath: "/config/enr"
 ```
 
 The parser normalizes the key label (lowercased, spaces → hyphens) and maps it to the field via `field.key` or the auto-kebab-cased field name. Unknown labels are silently ignored.
 
 #### `container` — header rows + repeating item rows
 
-The most common structure for blocks that display a list of things (plans, accordion items, features). The first `headerRows` rows are treated as the header; every remaining row is one item:
+The most common structure for blocks that display a list of things (accordion items, features). The first `headerRows` rows are treated as the header; every remaining row is one item:
 
 ```
 Block DOM                               Result
 ────────────────────────────────        ───────────────────────────────────
-row 0 │ "Our Plans" │ "<p>...</p>"  →   heading: "Our Plans"
-row 1 │ "Fixed 12"  │ "11.9" │ …   →   items[0]: { planName, rate, term }
-row 2 │ "Variable"  │ "10.2" │ …   →   items[1]: { planName, rate, term }
-row 3 │ "Fixed 24"  │ "12.4" │ …   →   items[2]: { planName, rate, term }
+row 0 │ "FAQ" │ "<p>...</p>"       →    heading: "FAQ"
+row 1 │ "Q1"  │ "<p>Answer</p>"   →    items[0]: { title, content }
+row 2 │ "Q2"  │ "<p>Answer</p>"   →    items[1]: { title, content }
 ```
 
-Header fields and item fields are defined separately in the schema (`headerFields` / `itemFields`). The result merges header fields and the `items` array into a single object.
-
 #### `extractValue(el, type)` — cell-level type coercion
-
-All three parsers delegate to this function. Given a cell element and a type string, it returns the correctly typed value:
 
 | Type      | What it reads                            | Returns                |
 | --------- | ---------------------------------------- | ---------------------- |
@@ -387,32 +400,79 @@ All three parsers delegate to this function. Given a cell element and a type str
 
 ---
 
+## Config Page Loader
+
+**`scripts/utils/config-page-loader.js`**
+
+Loads an EDS config page (a spreadsheet published as `.json`) and returns a flat object with native JS types.
+
+### Usage
+
+```js
+import { loadConfigPage } from '../utils/config-page-loader.js';
+
+const config = await loadConfigPage('/config/enrollment');
+// → { title: "Enroll in Ohio Natural Gas", termsRequired: true, minAge: 18, ... }
+```
+
+In `?mock=true` mode (preview server), `loadConfigPage` returns `null` so the component can fall back to its internal mock data.
+
+### Type inference
+
+Values are automatically cast without needing an explicit `type` column:
+
+| Raw string           | Inferred type | Result           |
+| -------------------- | ------------- | ---------------- |
+| `"true"` / `"false"` | boolean       | `true` / `false` |
+| `"18"`, `"3.5"`      | number        | `18`, `3.5`      |
+| anything else        | string        | unchanged        |
+
+The spreadsheet can also provide an explicit `type` column (`boolean`, `number`) to override inference.
+
+### `parseConfigPage(html)`
+
+Exported separately to allow testing without fetch. Parses a `.plain.html` string (the DA document format) where each paragraph is a `Key: Value` line. Keys are normalized to camelCase.
+
+---
+
 ## Preview Server
 
-**`scripts/preview-server/`** — started with `npm run preview` → `http://localhost:5175`
+**`tools/preview-server/`** — started with `npm run preview` → `http://localhost:5175`
 
 A local Express + Vite server that auto-discovers all blocks and generates interactive previews without needing a real AEM environment.
+
+### Hot reload
+
+The server provides three levels of live feedback:
+
+| Change                           | Mechanism                    | Effect                                  |
+| -------------------------------- | ---------------------------- | --------------------------------------- |
+| `block.js` / `block.css`         | Vite HMR                     | Hot module replacement — no page reload |
+| `_block.json` (mocks)            | chokidar watcher → `vite.ws` | Full page reload                        |
+| `html-generator.js` / `index.js` | `node --watch`               | Server restart                          |
 
 ### How it works
 
 1. **Block discovery**: scans `blocks/` for directories, reads each `_block.json`.
 2. **HTML generation** (`html-generator.js`): converts the `eds` schema + mock variant data into the exact HTML EDS would produce in production (double-wrapped cells, proper row structure).
 3. **Preview page**: serves that HTML inside a full EDS-style page that loads real styles and scripts, so the block's `decorate()` runs exactly as in production.
-4. **Vite middleware**: all JS/CSS is served through Vite, so edits are reflected instantly on browser refresh.
-5. **Auto-refresh**: the dashboard polls `/api/blocks` every 3 s and reloads if a new block appears.
+4. **Vite middleware**: all JS/CSS is served through Vite with HMR.
+5. **Test results**: runs Vitest in the background at startup; results appear as badges on each card and in the dashboard header.
 
 ### Endpoints
 
-| URL                                            | Description                                                          |
-| ---------------------------------------------- | -------------------------------------------------------------------- |
-| `http://localhost:5175/`                       | Dashboard — grid of all blocks                                       |
-| `/preview/:blockName`                          | Full preview of a block (native EDS preview page)                    |
-| `/preview/:blockName?variant=X`                | Preview a specific variant                                           |
-| `/tools/sidekick/library.html`                 | Sidekick Library UI                                                  |
-| `/tools/sidekick/library.json`                 | Block list consumed by Sidekick Library                              |
-| `/tools/sidekick/blocks/:blockName`            | Container page (used by Sidekick Library renderer)                   |
-| `/tools/sidekick/blocks/:blockName.plain.html` | Raw `.plain.html` (sections as direct `<body>` children)             |
-| `/api/blocks`                                  | JSON array of all discovered blocks (used by dashboard auto-refresh) |
+| URL                                            | Description                                              |
+| ---------------------------------------------- | -------------------------------------------------------- |
+| `http://localhost:5175/`                       | Dashboard — grid of all blocks                           |
+| `/preview/:blockName`                          | Full preview of a block                                  |
+| `/preview/:blockName?variant=X`                | Preview a specific mock variant                          |
+| `/tools/sidekick/library.html`                 | Sidekick Library UI                                      |
+| `/tools/sidekick/library.json`                 | Block list consumed by Sidekick Library                  |
+| `/tools/sidekick/blocks/:blockName`            | Container page (used by Sidekick Library renderer)       |
+| `/tools/sidekick/blocks/:blockName.plain.html` | Raw `.plain.html` (sections as direct `<body>` children) |
+| `/api/blocks`                                  | JSON array of all discovered blocks                      |
+| `/api/test-results`                            | Latest Vitest results (GET)                              |
+| `POST /api/run-tests`                          | Re-run tests and return results                          |
 
 ### Block status badges
 
@@ -458,8 +518,6 @@ document.querySelector('sidekick-library').config = {
 };
 ```
 
-`config.base` must point to the `library.json` file, not the server origin.
-
 ### `library.json` format
 
 The preview server generates this dynamically from discovered blocks:
@@ -468,7 +526,10 @@ The preview server generates this dynamically from discovered blocks:
 {
   "data": [
     { "name": "Accordion", "path": "/tools/sidekick/blocks/accordion" },
-    { "name": "Hero", "path": "/tools/sidekick/blocks/hero" }
+    {
+      "name": "Enrollment Flow",
+      "path": "/tools/sidekick/blocks/enrollment-flow"
+    }
   ]
 }
 ```
@@ -508,18 +569,18 @@ npm run storybook        # Dev server at http://localhost:6006
 npm run build-storybook  # Static build
 ```
 
-Storybook is used for **React-based blocks only** — the blocks that export a React component tree rather than a plain `decorate()` function (e.g. `plans`, `my-account`). It provides isolated, fast iteration on component UI without needing EDS or a running preview server.
+Storybook is used for **React-based blocks only** — blocks that export a React component tree rather than a plain `decorate()` function. Currently: `enrollment-flow`.
 
 ### Story files
 
-Each React block that has stories keeps them in a `blockname.stories.jsx` file next to the component:
+Each React block keeps its stories in a `blockname.stories.jsx` file next to the component:
 
 ```
-blocks/plans/
-├── plans.js              # EDS entry — decorate() mounts the React tree
-├── plans.stories.jsx     # Storybook stories
+blocks/enrollment-flow/
+├── enrollment-flow.js        # EDS entry — decorate() mounts the React tree
+├── enrollment-flow.stories.jsx
 └── components/
-    └── Plans.jsx         # React component imported by both
+    └── EnrollmentFlow.jsx    # React component imported by both
 ```
 
 Storybook picks up every `blocks/**/*.stories.jsx` file automatically (configured in `.storybook/main.js`).
@@ -529,20 +590,15 @@ Storybook picks up every `blocks/**/*.stories.jsx` file automatically (configure
 Stories follow the [Component Story Format (CSF 3)](https://storybook.js.org/docs/api/csf):
 
 ```jsx
-import Plans from './components/Plans.jsx';
-import { mockPlans } from './usePlansData.js';
+import EnrollmentFlow from './components/EnrollmentFlow.jsx';
 
 export default {
-  title: 'Blocks/Plans',
-  component: Plans,
+  title: 'Blocks/EnrollmentFlow',
+  component: EnrollmentFlow,
 };
 
 export const Default = {
-  args: { plans: mockPlans },
-};
-
-export const Loading = {
-  render: () => <div className="plans plans--loading">...</div>,
+  args: { configPath: '/config/enrollment' },
 };
 ```
 
@@ -578,5 +634,15 @@ npm test           # Run all unit tests once (Vitest)
 npm run test:watch # Watch mode
 npm run test:e2e   # Playwright end-to-end tests
 ```
+
+### Test layout
+
+| Path                                                 | Tool           | What it covers                     |
+| ---------------------------------------------------- | -------------- | ---------------------------------- |
+| `tests/unit/block-parser.test.js`                    | Vitest         | `block-parser.js` unit tests       |
+| `tests/unit/config-page-loader.test.js`              | Vitest         | `config-page-loader.js` unit tests |
+| `tests/integration/block-parser.integration.test.js` | Vitest + JSDOM | Parser against real fixture HTML   |
+| `blocks/enrollment-flow/__tests__/`                  | Vitest + RTL   | React component tests              |
+| `tests/e2e/accordion.spec.js`                        | Playwright     | End-to-end block fixture tests     |
 
 Unit tests live in `tests/` and in `__tests__/` folders next to the files they cover. Vitest is configured in `vitest.config.js` and uses jsdom as the test environment.

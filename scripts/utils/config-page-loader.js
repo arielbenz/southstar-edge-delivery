@@ -34,13 +34,19 @@ function toCamelCase(str) {
  * "18" / "3.5"   → number
  * rest            → string trimmed
  */
-function castValue(val) {
-  const trimmed = val.trim();
-  if (trimmed === 'true') return true;
-  if (trimmed === 'false') return false;
-  const num = Number(trimmed);
-  if (!isNaN(num) && trimmed !== '') return num;
-  return trimmed;
+function castValue(value, type) {
+  if (!value) return null;
+  switch (type?.toLowerCase()) {
+    case 'number':
+      return Number(value);
+    case 'boolean':
+      return value === 'true';
+    default:
+      if (value === 'true') return true;
+      if (value === 'false') return false;
+      if (value !== '' && !Number.isNaN(Number(value))) return Number(value);
+      return value;
+  }
 }
 
 /**
@@ -90,15 +96,15 @@ export async function loadConfigPage(path) {
   const isMock = new URLSearchParams(window.location.search).has('mock');
   if (isMock) return null;
 
-  const url = `${path}.plain.html`;
-  const res = await fetch(url);
+  // Read the spreadsheet JSON
+  const res = await fetch(`${path}.json`);
+  if (!res.ok) throw new Error(`loadConfigPage: ${path}.json → ${res.status}`);
 
-  if (!res.ok) {
-    throw new Error(
-      `loadConfigPage: failed to load "${url}" → ${res.status} ${res.statusText}`,
-    );
-  }
+  const { data } = await res.json();
 
-  const html = await res.text();
-  return parseConfigPage(html);
+  // Convierte el array [{ key, value, type }] a objeto plano
+  return data.reduce((acc, row) => {
+    acc[row.key] = castValue(row.value, row.type);
+    return acc;
+  }, {});
 }

@@ -12,7 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "preview": "node tools/preview-server/index.js",
+    "preview": "node --watch --watch-path=tools/preview-server tools/preview-server/index.js",
     "lint": "eslint blocks scripts && stylelint styles blocks/**/*.css",
     "lint:fix": "eslint --fix blocks scripts",
     "format": "prettier --write . --ignore-unknown",

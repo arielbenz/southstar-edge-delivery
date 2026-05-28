@@ -16,6 +16,7 @@ import express from 'express';
 import { existsSync, readFileSync, readdirSync, statSync } from 'fs';
 import { join, resolve } from 'path';
 import { createServer as createViteServer } from 'vite';
+import { watch as chokidarWatch } from 'chokidar';
 import {
   generateBlockHTML,
   getMockForVariant,
@@ -552,14 +553,14 @@ function renderPreviewPage(block, variant, mockData) {
   const variants = getVariants(json.mock);
   const structure = json.eds?.structure ?? '?';
 
-  // Inject special meta tags if the mock defines them (e.g. my-account)
+  // Inject special meta tags if the mock defines them
   const metaTags = mockData?._meta
     ? Object.entries(mockData._meta)
         .map(([k, v]) => `<meta name="${k}" content="${v}">`)
         .join('\n  ')
     : '';
 
-  // Additional query params from the mock (e.g. ?error=true for my-account)
+  // Additional query params from the mock
   const extraParams = mockData?._queryParams
     ? Object.entries(mockData._queryParams)
         .map(([k, v]) => `'${k}', '${v}'`)
@@ -727,13 +728,15 @@ function renderPreviewPage(block, variant, mockData) {
     <p class="preview-label">
       blocks/${name}/${name}.js · decorate() · ${variant}
     </p>
-    ${
-      name === 'header'
-        ? `<header><div class="nav-wrapper">${blockHTML}</div></header>`
-        : name === 'footer'
-          ? `<footer>${blockHTML}</footer>`
-          : `<div class="section">${blockHTML}</div>`
-    }
+    <div class="section">
+      ${
+        name === 'header'
+          ? `<header><div class="nav-wrapper">${blockHTML}</div></header>`
+          : name === 'footer'
+            ? `<footer>${blockHTML}</footer>`
+            : `<div>${blockHTML}</div>`
+      }
+    </div>
   </div>
 
   <script>window.__PREVIEW_SERVER = true</script>
@@ -852,22 +855,38 @@ async function start() {
 
   // Serve config page fixtures for local testing.
   // In production the EDS CDN serves these .plain.html pages.
-  app.get('/config/:name\\.plain\\.html', (req, res) => {
-    const fixturePath = join(
+  app.get('/config/:name\\.json', (req, res) => {
+    const fixturePath = path.join(
       ROOT,
       'tests/fixtures/config',
-      `${req.params.name}.html`,
+      `${req.params.name}.json`,
     );
-
     try {
-      const html = readFileSync(fixturePath, 'utf-8');
-      res.type('html').send(html);
+      const json = fs.readFileSync(fixturePath, 'utf-8');
+      res.type('application/json').send(json);
     } catch {
-      res.status(404).send(`Config fixture not found: ${req.params.name}`);
+      res
+        .status(404)
+        .json({ error: `Config fixture not found: ${req.params.name}` });
     }
   });
 
   app.use(vite.middlewares);
+
+  // ── Hot reload para cambios en mocks (_block.json) ───────────────────────
+  // Vite ya maneja HMR para JS/CSS. Acá escuchamos los JSON de mock y
+  // disparamos un full-reload para que el HTML server-side se regenere.
+  chokidarWatch(join(BLOCKS_DIR, '**/_*.json'), { ignoreInitial: true })
+    .on('change', (file) => {
+      const rel = file.replace(ROOT + '/', '');
+      console.log(`[Preview] mock changed: ${rel} → reloading`);
+      vite.ws.send({ type: 'full-reload' });
+    })
+    .on('add', (file) => {
+      const rel = file.replace(ROOT + '/', '');
+      console.log(`[Preview] mock added: ${rel} → reloading`);
+      vite.ws.send({ type: 'full-reload' });
+    });
 
   // Static files (CSS, images, .plain.html fragments, etc.)
   // Vite in custom mode does not serve static HTML — Express handles it directly
@@ -992,18 +1011,22 @@ async function start() {
   });
 
   app.listen(PORT, () => {
-    console.log(`
-  ╔══════════════════════════════════════════╗
-  ║  ⚡ Block Preview Server                  ║
-  ║                                          ║
-  ║  http://localhost:${PORT}                ║
-  ║                                          ║
-  ║  Dashboard:  /                           ║
-  ║  Preview:    /preview/<block-name>       ║
-  ║  API:        /api/blocks                 ║
-  ║  SK Library: /tools/sidekick/library.html║
-  ╚══════════════════════════════════════════╝
-    `);
+    const w = 42;
+    const row = (s = '') => `  ║${s.padEnd(w)}║`;
+    console.log([
+      '',
+      `  ╔${'═'.repeat(w)}╗`,
+      row('  Block Preview Server'),
+      row(),
+      row(`  http://localhost:${PORT}`),
+      row(),
+      row('  Dashboard:  /'),
+      row('  Preview:    /preview/<block-name>'),
+      row('  API:        /api/blocks'),
+      row('  SK Library: /tools/sidekick/library.html'),
+      `  ╚${'═'.repeat(w)}╝`,
+      '',
+    ].join('\n'));
 
     // Run tests in background so the dashboard can show results
     console.log('  Running tests in background…');

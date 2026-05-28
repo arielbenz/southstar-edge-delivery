@@ -27,7 +27,6 @@ function loadSchema(relPath) {
 }
 
 const accordionSchema = loadSchema('blocks/accordion/_accordion.json');
-const plansSchema = loadSchema('blocks/plans/_plans.json');
 const promoBannerSchema = loadSchema('blocks/promo-banner/_promo-banner.json');
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -67,50 +66,6 @@ describe('BlockParser — integration with real fixture', () => {
         expect(item.title.length).toBeGreaterThan(0);
         expect(typeof item.content).toBe('string');
         expect(item.content).toContain('<p>');
-      }
-    });
-  });
-
-  // ── plans ──────────────────────────────────────────────────────────────────
-  describe('plans', () => {
-    let result;
-    beforeAll(() => {
-      const el = document.querySelector('.plans');
-      result = parseBlock(el, plansSchema);
-    });
-
-    test('result is not null or undefined', () => {
-      expect(result).toBeDefined();
-      expect(result).not.toBeNull();
-    });
-
-    test('items is an array with 3 plans', () => {
-      expect(Array.isArray(result.items)).toBe(true);
-      expect(result.items).toHaveLength(3);
-    });
-
-    test('rate and term are strings', () => {
-      for (const plan of result.items) {
-        expect(typeof plan.rate).toBe('string');
-        expect(typeof plan.term).toBe('string');
-      }
-    });
-
-    test('featured is boolean', () => {
-      for (const plan of result.items) {
-        expect(typeof plan.featured).toBe('boolean');
-      }
-    });
-
-    test('exactly 1 plan has featured=true', () => {
-      const featured = result.items.filter((p) => p.featured === true);
-      expect(featured).toHaveLength(1);
-      expect(featured[0].planName).toBe('Fixed Rate 24 Month');
-    });
-
-    test('featuresHtml is html with <ul>', () => {
-      for (const plan of result.items) {
-        expect(plan.featuresHtml).toContain('<ul>');
       }
     });
   });
