@@ -1,0 +1,351 @@
+.enrollment-flow {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.enrollment-flow__header {
+  margin-bottom: var(--space-8);
+}
+
+.enrollment-flow__title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+}
+
+.enrollment-flow__subtitle {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.enrollment-flow__steps {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  justify-content: center;
+}
+
+.enrollment-flow__step {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.enrollment-flow__step-circle {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-text-muted);
+}
+
+.enrollment-flow__step--active .enrollment-flow__step-circle {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.enrollment-flow__step--completed .enrollment-flow__step-circle {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.enrollment-flow__step-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.enrollment-flow__step--active .enrollment-flow__step-label {
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+}
+
+.enrollment-flow__body {
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-text-inverse);
+}
+
+.enrollment-flow__step-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+}
+
+.enrollment-flow__step-description {
+  margin: 0 0 var(--space-6);
+  color: var(--color-text-muted);
+}
+
+.enrollment-flow__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.enrollment-flow__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.enrollment-flow__field label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+}
+
+.enrollment-flow__field input,
+.enrollment-flow__field select {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background: var(--color-text-inverse);
+}
+
+.enrollment-flow__field input:focus,
+.enrollment-flow__field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.enrollment-flow__nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-8);
+  gap: var(--space-4);
+}
+
+.enrollment-flow__btn {
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.enrollment-flow__btn--next {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: none;
+}
+
+.enrollment-flow__btn--next:hover {
+  background: var(--color-primary-dark);
+}
+
+.enrollment-flow__btn--back {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.enrollment-flow__btn--back:hover {
+  background: var(--color-surface);
+}
+
+.enrollment-flow__support {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.enrollment-flow__support a,
+.enrollment-flow__terms a {
+  color: var(--color-primary);
+}
+
+.enrollment-flow__review dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.enrollment-flow__review dt {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-muted);
+}
+
+.enrollment-flow__review dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.enrollment-flow__terms {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ── Confirmation screen ─────────────────────────────────────────── */
+
+.enrollment-flow--confirmed {
+  text-align: center;
+}
+
+.enrollment-flow__confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+}
+
+.enrollment-flow__confirmation-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--color-success-light, #e8f5e9);
+  color: var(--color-success, #2e7d32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.enrollment-flow__confirmation-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.enrollment-flow__confirmation-title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+}
+
+.enrollment-flow__confirmation-message {
+  margin: 0;
+  color: var(--color-text-muted);
+  max-width: 400px;
+}
+
+.enrollment-flow__confirmation-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  text-align: left;
+  width: 100%;
+  max-width: 360px;
+}
+
+.enrollment-flow__confirmation-details dt {
+  font-weight: var(--font-semibold);
+  color: var(--color-text-muted);
+}
+
+.enrollment-flow__confirmation-details dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.enrollment-flow__btn--link {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.enrollment-flow--error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-md);
+  background: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.enrollment-flow__error-icon {
+  width: var(--space-6);
+  height: var(--space-6);
+  flex: 0 0 auto;
+}
+
+.enrollment-flow__error-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.enrollment-flow__error-message {
+  margin: 0;
+  font-weight: var(--font-semibold);
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.enrollment-flow--skeleton {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.enrollment-flow__skeleton-rect {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.5s infinite;
+}
+
+.enrollment-flow__skeleton-rect--title {
+  height: var(--space-8);
+  width: 60%;
+}
+
+.enrollment-flow__skeleton-rect--steps {
+  height: var(--space-12);
+}
+
+.enrollment-flow__skeleton-rect--body {
+  height: 240px;
+}
+
+@media (max-width: 480px) {
+  .enrollment-flow {
+    padding: var(--space-4);
+  }
+
+  .enrollment-flow__step-label {
+    display: none;
+  }
+
+  .enrollment-flow__body {
+    padding: var(--space-4);
+  }
+}

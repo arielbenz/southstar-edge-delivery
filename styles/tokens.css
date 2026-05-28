@@ -1,0 +1,82 @@
+/* ============================================================
+   Ohio Natural Gas — Design Tokens
+   ============================================================ */
+
+:root {
+  /* ---- Colors ---- */
+  --color-primary: #e87722;
+  --color-primary-dark: #c45e00;
+  --color-primary-light: #fff0e0;
+  --color-secondary: #003087;
+  --color-secondary-dark: #001f5b;
+  --color-secondary-light: #e8eef8;
+  --color-success: #2e7d32;
+  --color-success-light: #e8f5e9;
+  --color-error: #c62828;
+  --color-error-light: #ffebee;
+  --color-surface: #f5f5f5;
+  --color-surface-alt: #fafafa;
+  --color-text: #1a1a1a;
+  --color-text-muted: #666666;
+  --color-text-inverse: #ffffff;
+  --color-border: #e0e0e0;
+  --color-border-strong: #bdbdbd;
+
+  /* ---- Spacing (4px scale) ---- */
+  --space-1: 0.25rem; /* 4px  */
+  --space-2: 0.5rem; /* 8px  */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-7: 1.75rem; /* 28px */
+  --space-8: 2rem; /* 32px */
+  --space-9: 2.25rem; /* 36px */
+  --space-10: 2.5rem; /* 40px */
+  --space-11: 2.75rem; /* 44px */
+  --space-12: 3rem; /* 48px */
+  --space-14: 3.5rem; /* 56px */
+  --space-16: 4rem; /* 64px */
+
+  /* ---- Typography ---- */
+  --font-sans: 'Source Sans Pro', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Source Code Pro', 'Courier New', monospace;
+
+  /* Font sizes */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+  --text-5xl: 3rem; /* 48px */
+
+  /* Line heights */
+  --leading-tight: 1.25;
+  --leading-base: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* ---- Border radius ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* ---- Transitions ---- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}

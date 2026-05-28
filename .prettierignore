@@ -1,0 +1,8 @@
+node_modules
+.build
+build
+coverage
+storybook-static
+package-lock.json
+*.bundle.js
+style.css

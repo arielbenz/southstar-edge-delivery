@@ -1,0 +1,4 @@
+mountpoints:
+  /:
+    url: https://content.da.live/arielbenz/southstar-edge-delivery
+    type: markup

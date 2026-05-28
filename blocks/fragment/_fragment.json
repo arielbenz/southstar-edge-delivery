@@ -1,0 +1,11 @@
+{
+  "definitions": [],
+  "models": [],
+  "filters": [],
+  "eds": {
+    "structure": "simple",
+    "fields": [{ "name": "path", "type": "link" }],
+    "note": "Renders an EDS fragment by path. No Universal Editor model needed."
+  },
+  "mock": []
+}

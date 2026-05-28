@@ -1,0 +1,22 @@
+version: 1
+indices:
+  query-index:
+    include:
+      - /plans/**
+      - /blog/**
+    exclude:
+      - /tools/**
+      - /drafts/**
+    properties:
+      title:
+        selectFirst: head > title
+        value: text(el)
+      description:
+        selectFirst: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        selectFirst: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      date:
+        selectFirst: head > meta[name="date"]
+        value: attribute(el, "content")

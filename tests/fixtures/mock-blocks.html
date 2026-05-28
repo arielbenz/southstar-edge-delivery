@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mock Blocks - SouthStar</title>
+    <meta name="prime-token" content="mock-prime-token-12345" />
+    <meta name="user-id" content="user-001" />
+  </head>
+  <body>
+    <!-- ============================================================
+  ACCORDION — container block
+  structure: 1 header row (heading | description) + 3 item rows (title | content)
+  Schema: blocks/accordion/_accordion.json
+============================================================ -->
+    <div class="accordion">
+      <!-- Row 0: header -->
+      <div>
+        <div>Frequently Asked Questions</div>
+        <div>
+          <p>Answers to common questions about Ohio Natural Gas plans.</p>
+        </div>
+      </div>
+      <!-- Row 1: item -->
+      <div>
+        <div>How do I switch to Ohio Natural Gas?</div>
+        <div>
+          <p>
+            Switching is easy. Simply choose a plan, provide your current
+            utility account number, and complete enrollment online. We handle
+            the rest.
+          </p>
+        </div>
+      </div>
+      <!-- Row 2: item -->
+      <div>
+        <div>What is a fixed-rate plan?</div>
+        <div>
+          <p>
+            A fixed-rate plan locks in your rate per CCF for the duration of
+            your contract, protecting you from market fluctuations.
+          </p>
+        </div>
+      </div>
+      <!-- Row 3: item -->
+      <div>
+        <div>Is there an early termination fee?</div>
+        <div>
+          <p>
+            Fixed-rate plans include a $50 early termination fee if you cancel
+            before the contract ends. Variable-rate plans have no cancellation
+            fee.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+  PLANS — container block
+  structure: headerRows=0, all rows = plan items
+  plan row cols: planName | rate | term | featuresHtml | featured
+  Schema: blocks/plans/_plans.json
+============================================================ -->
+    <div class="plans">
+      <!-- Row 0: Fixed Rate 12 Month -->
+      <div>
+        <div>Fixed Rate 12 Month</div>
+        <div>52.9</div>
+        <div>12</div>
+        <div>
+          <ul>
+            <li>Locked-in rate for 12 months</li>
+            <li>No enrollment fee</li>
+            <li>Budget certainty</li>
+          </ul>
+        </div>
+        <div>false</div>
+      </div>
+      <!-- Row 1: Fixed Rate 24 Month (featured) -->
+      <div>
+        <div>Fixed Rate 24 Month</div>
+        <div>54.5</div>
+        <div>24</div>
+        <div>
+          <ul>
+            <li>Locked-in rate for 24 months</li>
+            <li>Price protection through two winters</li>
+            <li>No enrollment fee</li>
+          </ul>
+        </div>
+        <div>true</div>
+      </div>
+      <!-- Row 2: Variable Rate Monthly -->
+      <div>
+        <div>Variable Rate Monthly</div>
+        <div>49.1</div>
+        <div>1</div>
+        <div>
+          <ul>
+            <li>Month-to-month flexibility</li>
+            <li>Cancel anytime</li>
+            <li>No long-term commitment</li>
+          </ul>
+        </div>
+        <div>false</div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+  PROMO BANNER — key-value block
+  structure: each row = key (col0) | value (col1)
+  Schema: blocks/promo-banner/_promo-banner.json
+============================================================ -->
+    <div class="promo-banner">
+      <div>
+        <div>title</div>
+        <div>Limited Time: Lock In Winter Rates</div>
+      </div>
+      <div>
+        <div>body</div>
+        <div>
+          <p>
+            Enroll before December 1st and save up to 25% on your winter gas
+            bill.
+          </p>
+        </div>
+      </div>
+      <div>
+        <div>cta-text</div>
+        <div>Get This Rate</div>
+      </div>
+      <div>
+        <div>cta-url</div>
+        <div><a href="/enroll?promo=winter2024">Enroll Now</a></div>
+      </div>
+      <div>
+        <div>variant</div>
+        <div>seasonal</div>
+      </div>
+    </div>
+  </body>
+</html>

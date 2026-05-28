@@ -1,0 +1,75 @@
+{
+  "definitions": [
+    {
+      "title": "Hero",
+      "id": "hero",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Hero",
+              "model": "hero",
+              ":type": "southstar/components/hero"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "hero",
+      "fields": [
+        {
+          "component": "reference",
+          "name": "image",
+          "label": "Hero Image",
+          "multi": false
+        },
+        { "component": "richtext", "name": "content", "label": "Hero Content" },
+        {
+          "component": "select",
+          "name": "variant",
+          "label": "Variant",
+          "options": [
+            { "name": "Default", "value": "" },
+            { "name": "Background Image", "value": "background" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": [{ "id": "hero-section", "components": ["hero"] }],
+  "eds": {
+    "structure": "container",
+    "headerRows": 1,
+    "headerFields": [
+      { "name": "image", "type": "picture" },
+      { "name": "textContent", "type": "html" }
+    ]
+  },
+  "mock": [
+    {
+      "_variant": "background",
+      "_label": "Background image",
+      "image": "/tests/local/assets/hero-bg.svg",
+      "textContent": "<h1>Clear Options, No Surprises.</h1><p>Ohio's trusted natural gas provider since 1985.</p><p><strong><a href='/plans'>Compare Plans</a></strong></p>",
+      "classes": ["background"]
+    },
+    {
+      "_variant": "split",
+      "_label": "Split layout",
+      "image": "/tests/local/assets/hero-bg.svg",
+      "textContent": "<h1>Switch & Save on Natural Gas</h1><p>Fixed rates from 11.9¢/CCF. No enrollment fees.</p><p><strong><a href='/enroll'>Get Started</a></strong></p>",
+      "classes": ["split"]
+    },
+    {
+      "_variant": "text-only",
+      "_label": "Text only",
+      "image": null,
+      "textContent": "<h1>Ohio Natural Gas Plans</h1><p>Compare fixed and variable rate plans for your home.</p><p><strong><a href='/plans'>See All Plans</a></strong></p>",
+      "classes": []
+    }
+  ]
+}

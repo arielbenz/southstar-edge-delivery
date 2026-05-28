@@ -1,0 +1,61 @@
+{
+  "definitions": {
+    "id": "enrollment-flow",
+    "title": "Enrollment Flow",
+    "plugins": {
+      "xwalk": {
+        "page": {
+          "resourceType": "core/franklin/components/block/v1/block",
+          "template": {
+            "name": "Enrollment Flow",
+            "model": "enrollment-flow"
+          }
+        }
+      }
+    }
+  },
+  "models": {
+    "id": "enrollment-flow",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "configPath",
+        "label": "Config page path",
+        "description": "Path of the config page without extension. e.g., /config/enrollment"
+      }
+    ]
+  },
+  "filters": [],
+  "eds": {
+    "structure": "key-value",
+    "fields": [
+      {
+        "name": "configPath",
+        "type": "link"
+      }
+    ]
+  },
+  "mock": {
+    "configPath": "/config/enrollment",
+    "_mockConfig": {
+      "title": "Enroll in Ohio Natural Gas",
+      "subtitle": "Takes only 5 minutes",
+      "supportPhone": "1-800-555-0100",
+      "supportEmail": "support@ohiong.com",
+      "termsRequired": true,
+      "minAge": 18,
+      "step1Title": "Choose Your Plan",
+      "step1Description": "Select the plan that fits your home and budget.",
+      "step2Title": "Your Information",
+      "step2Description": "We need a few details to set up your account.",
+      "step3Title": "Review & Confirm",
+      "step3Description": "Double-check your details before we submit.",
+      "termsUrl": "/docs/terms-and-conditions.pdf",
+      "privacyUrl": "/docs/privacy-policy.pdf",
+      "rateScheduleUrl": "/docs/rate-schedule.pdf",
+      "successUrl": "/enrollment/confirmation",
+      "errorUrl": "/enrollment/error",
+      "loginUrl": "/login"
+    }
+  }
+}

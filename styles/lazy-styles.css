@@ -1,0 +1,11 @@
+/* ============================================================
+   Ohio Natural Gas — Lazy Styles
+   
+   This file is meant for styles that can be loaded lazily after the initial page
+   "load" event. It includes styles that are not part of the
+   LCP (Largest Contentful Paint), such as:
+   - Components below the fold
+   - Non-critical animations
+   - Optional block styles
+   - Alternative themes or variants
+   ============================================================ */

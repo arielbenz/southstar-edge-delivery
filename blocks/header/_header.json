@@ -1,0 +1,16 @@
+{
+  "eds": {
+    "structure": "simple",
+    "fields": [],
+    "note": "Loads its content from an EDS fragment (/nav). Has no own fields."
+  },
+  "mock": [
+    {
+      "_variant": "default",
+      "_label": "Header with navigation",
+      "_meta": {
+        "nav": "/blocks/header/_mock-nav"
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "_comment": "Page-level and cross-block definitions. Source of truth for items that don't belong to a single block folder.",
+  "definitions": [],
+  "models": [
+    {
+      "id": "section",
+      "fields": [
+        {
+          "component": "multiselect",
+          "name": "style",
+          "label": "Section Style",
+          "options": [
+            { "name": "Full Width", "value": "full-width" },
+            { "name": "Dark Background", "value": "dark" },
+            { "name": "Light Gray", "value": "light-gray" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "main",
+      "components": [
+        "hero",
+        "accordion",
+        "promo-banner",
+        "plans",
+        "my-account",
+        "enrollment-flow"
+      ]
+    }
+  ]
+}
