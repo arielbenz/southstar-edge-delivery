@@ -1,0 +1,20 @@
+/* SouthStar Energy — Brand tokens
+ * Primary: Orange #E87722  |  Secondary: Navy #003087
+ */
+:root {
+  --brand-primary: #e87722;
+  --brand-primary-dark: #c45e00;
+  --brand-primary-light: #fff0e0;
+  --brand-secondary: #003087;
+  --brand-secondary-dark: #001f5b;
+  --brand-secondary-light: #e8eef8;
+  --brand-name: 'SouthStar Energy Services';
+
+  /* Override tokens.css so blocks pick up the brand color */
+  --color-primary: #e87722;
+  --color-primary-dark: #c45e00;
+  --color-primary-light: #fff0e0;
+  --color-secondary: #003087;
+  --color-secondary-dark: #001f5b;
+  --color-secondary-light: #e8eef8;
+}

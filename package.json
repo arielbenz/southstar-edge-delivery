@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "preview": "node --watch --watch-path=tools/preview-server tools/preview-server/index.js",
+    "lighthouse": "node -e \"import('./tools/preview-server/lighthouse-runner.js').then(m => m.runLighthouse('http://localhost:5175/preview/enrollment-flow?mock=true')).then(console.log)\"",
     "lint": "eslint blocks scripts && stylelint styles blocks/**/*.css",
     "lint:fix": "eslint --fix blocks scripts",
     "format": "prettier --write . --ignore-unknown",
@@ -41,6 +42,8 @@
     "stylelint": "^16.0.0",
     "stylelint-config-standard": "^36.0.0",
     "vite": "^5.0.0",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "lighthouse": "^12.0.0",
+    "chrome-launcher": "^1.1.0"
   }
 }

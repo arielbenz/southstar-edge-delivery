@@ -15,6 +15,7 @@ import {
   waitForFirstImage,
 } from './aem.js';
 import { getOrigin, getHref } from './utils/dom.js';
+import { setupBrand } from './utils/brand-config.js';
 
 // Detects Sidekick Library srcdoc iframe
 const CURRENT_ORIGIN = getOrigin();
@@ -115,6 +116,12 @@ function loadDelayed() {
 
 /** Entry point */
 async function loadPage() {
+  // PRIMERO: cargar los brand tokens para que los colores estén disponibles
+  // antes de que se pinte cualquier bloque
+  const brand = await setupBrand();
+  // eslint-disable-next-line no-console
+  console.debug(`[Brand] Active brand: ${brand}`);
+
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();

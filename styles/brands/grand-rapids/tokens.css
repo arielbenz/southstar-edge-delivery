@@ -1,0 +1,20 @@
+/* Grand Rapids Energy — Brand tokens
+ * Primary: Purple #7B2D8B  |  Secondary: Orange #F7941D
+ */
+:root {
+  --brand-primary: #7b2d8b;
+  --brand-primary-dark: #541e5f;
+  --brand-primary-light: #f5ebf7;
+  --brand-secondary: #f7941d;
+  --brand-secondary-dark: #c47010;
+  --brand-secondary-light: #fef3e6;
+  --brand-name: 'Grand Rapids Energy';
+
+  /* Override tokens.css so blocks pick up the brand color */
+  --color-primary: #7b2d8b;
+  --color-primary-dark: #541e5f;
+  --color-primary-light: #f5ebf7;
+  --color-secondary: #f7941d;
+  --color-secondary-dark: #c47010;
+  --color-secondary-light: #fef3e6;
+}

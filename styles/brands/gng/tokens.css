@@ -1,0 +1,20 @@
+/* Georgia Natural Gas — Brand tokens
+ * Primary: Blue #005DAA  |  Secondary: Red #E31837
+ */
+:root {
+  --brand-primary: #005daa;
+  --brand-primary-dark: #003d73;
+  --brand-primary-light: #e6f0fa;
+  --brand-secondary: #e31837;
+  --brand-secondary-dark: #a81128;
+  --brand-secondary-light: #fce8eb;
+  --brand-name: 'Georgia Natural Gas';
+
+  /* Override tokens.css so blocks pick up the brand color */
+  --color-primary: #005daa;
+  --color-primary-dark: #003d73;
+  --color-primary-light: #e6f0fa;
+  --color-secondary: #e31837;
+  --color-secondary-dark: #a81128;
+  --color-secondary-light: #fce8eb;
+}

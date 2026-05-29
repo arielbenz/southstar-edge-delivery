@@ -1,0 +1,20 @@
+/* Only Natural Gas — Brand tokens
+ * Primary: Green #00833E  |  Secondary: Yellow #FFB600
+ */
+:root {
+  --brand-primary: #00833e;
+  --brand-primary-dark: #005728;
+  --brand-primary-light: #e6f5ec;
+  --brand-secondary: #ffb600;
+  --brand-secondary-dark: #cc9200;
+  --brand-secondary-light: #fff8e6;
+  --brand-name: 'Only Natural Gas';
+
+  /* Override tokens.css so blocks pick up the brand color */
+  --color-primary: #00833e;
+  --color-primary-dark: #005728;
+  --color-primary-light: #e6f5ec;
+  --color-secondary: #ffb600;
+  --color-secondary-dark: #cc9200;
+  --color-secondary-light: #fff8e6;
+}

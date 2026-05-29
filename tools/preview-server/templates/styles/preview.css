@@ -1,0 +1,163 @@
+/* ============================================================
+   EDS Block Studio — Preview Page
+   ============================================================ */
+
+/* Dark theme (default) */
+:root {
+  --bg:       #080c10;
+  --surface:  #0d1117;
+  --panel:    #111820;
+  --border:   rgba(255, 255, 255, 0.06);
+  --border-h: rgba(255, 255, 255, 0.12);
+  --text:     #e6edf3;
+  --muted:    #7d8590;
+  --accent:   #e87722;
+  --accent-d: #c45e00;
+  --blue:     #388bfd;
+  --green:    #3fb950;
+  --yellow:   #d29922;
+  --red:      #f85149;
+  --purple:   #bc8cff;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --bg:       #f8f9fe;
+  --surface:  #ffffff;
+  --panel:    #f0f4fc;
+  --border:   rgba(99, 102, 241, 0.12);
+  --border-h: rgba(99, 102, 241, 0.24);
+  --text:     #0f172a;
+  --muted:    #64748b;
+  --accent:   #f97316;
+  --accent-d: #ea580c;
+  --blue:     #3b82f6;
+  --green:    #10b981;
+  --yellow:   #f59e0b;
+  --red:      #ef4444;
+  --purple:   #8b5cf6;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ── Top bar ── */
+.preview-bar {
+  background: var(--color-secondary, #003087);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.8125rem;
+  flex-wrap: wrap;
+}
+.preview-bar a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+}
+.preview-bar a:hover {
+  color: white;
+}
+.preview-bar .sep {
+  opacity: 0.3;
+}
+.block-title {
+  font-weight: 600;
+  color: white;
+}
+.variant-title {
+  color: rgba(255, 255, 255, 0.7);
+}
+.spacer {
+  flex: 1;
+}
+.btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.7rem;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.btn-primary {
+  background: var(--color-primary, #e87722);
+  border-color: transparent;
+}
+.btn-primary:hover {
+  background: #d0641a;
+}
+
+/* ── Variant tabs ── */
+.variant-tabs {
+  background: white;
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+  display: flex;
+  gap: 0;
+  padding: 0 1.25rem;
+  overflow-x: auto;
+}
+.tab {
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-muted, #888);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  padding: 0.6rem 0.9rem;
+  text-decoration: none;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+  white-space: nowrap;
+}
+.tab:hover {
+  color: var(--color-text, #1a1a1a);
+}
+.tab.active {
+  border-bottom-color: var(--color-primary, #e87722);
+  color: var(--color-primary, #e87722);
+  font-weight: 600;
+}
+
+/* ── Preview iframe ── */
+.preview-wrap {
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  margin: 1.25rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e0e0e0);
+}
+.preview-wrap.mobile {
+  max-width: 390px;
+}
+.preview-wrap.tablet {
+  max-width: 768px;
+}
+
+iframe {
+  border: none;
+  display: block;
+  width: 100%;
+  height: 80vh;
+}

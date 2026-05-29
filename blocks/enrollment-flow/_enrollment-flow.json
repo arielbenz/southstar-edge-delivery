@@ -27,6 +27,7 @@
   },
   "filters": [],
   "eds": {
+    "type": "react",
     "structure": "key-value",
     "fields": [
       {

@@ -1,0 +1,38 @@
+/**
+ * _brand-base.css — Documentación de variables que TODOS los brand token
+ * files deben definir. No se importa directamente — es solo referencia.
+ *
+ * Cada archivo styles/brands/<brand>/tokens.css debe sobrescribir:
+ *
+ *   --brand-primary        Color principal del brand (botones, links activos)
+ *   --brand-primary-dark   Hover / pressed del primary
+ *   --brand-primary-light  Fondos suaves del primary
+ *   --brand-secondary      Color de acento (headers, highlights)
+ *   --brand-secondary-dark Hover / pressed del secondary
+ *   --brand-secondary-light Fondos suaves del secondary
+ *   --brand-name           Nombre legible de la marca (string CSS)
+ *
+ * Los archivos de brand también deben sobrescribir las variables de tokens.css
+ * usadas por los bloques:
+ *
+ *   --color-primary        → debe ser igual a --brand-primary
+ *   --color-primary-dark   → debe ser igual a --brand-primary-dark
+ *   --color-primary-light  → debe ser igual a --brand-primary-light
+ *   --color-secondary      → debe ser igual a --brand-secondary
+ *   --color-secondary-dark → debe ser igual a --brand-secondary-dark
+ *   --color-secondary-light → debe ser igual a --brand-secondary-light
+ */
+
+/* Defaults (idénticos a tokens.css) — se usan si no se carga ningún brand */
+:root {
+  --brand-primary: #e87722;
+  --brand-primary-dark: #c45e00;
+  --brand-primary-light: #fff0e0;
+  --brand-secondary: #003087;
+  --brand-secondary-dark: #001f5b;
+  --brand-secondary-light: #e8eef8;
+
+  --brand-name: 'SouthStar Energy';
+  --brand-font-heading: 'Source Sans Pro', system-ui, sans-serif;
+  --brand-font-body: 'Source Sans Pro', system-ui, sans-serif;
+}

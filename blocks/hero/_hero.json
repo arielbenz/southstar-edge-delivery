@@ -53,14 +53,14 @@
     {
       "_variant": "background",
       "_label": "Background image",
-      "image": "/tests/local/assets/hero-bg.svg",
+      "image": "/tests/local/assets/hero-bg.png",
       "textContent": "<h1>Clear Options, No Surprises.</h1><p>Ohio's trusted natural gas provider since 1985.</p><p><strong><a href='/plans'>Compare Plans</a></strong></p>",
       "classes": ["background"]
     },
     {
       "_variant": "split",
       "_label": "Split layout",
-      "image": "/tests/local/assets/hero-bg.svg",
+      "image": "/tests/local/assets/hero-bg.png",
       "textContent": "<h1>Switch & Save on Natural Gas</h1><p>Fixed rates from 11.9¢/CCF. No enrollment fees.</p><p><strong><a href='/enroll'>Get Started</a></strong></p>",
       "classes": ["split"]
     },
